@@ -53,9 +53,10 @@ LOCAL_SRC_FILES := 	main.cpp \
 					render/sceneObjects/mesh/MeshManager.cpp \
 					render/sceneObjects/camera/Camera.cpp \
 					render/sceneObjects/light/Light.cpp \
-					render/inputSystem/Input.cpp
+					render/inputSystem/Input.cpp \
+					render/modules/audio/AudioPlayer.cpp
 
-LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lz
+LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lz -lOpenSLES
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng libjpeg libfreetype
 
 include $(BUILD_SHARED_LIBRARY)

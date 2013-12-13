@@ -43,6 +43,7 @@
 #include "render/inputSystem/Input.h"
 #include "render/GUI/TextManager.h"
 #include "render/GUI/Rect.h"
+#include "render/modules/audio/AudioPlayer.h"
 
 static void init_resources() {
 	logInf("creating new instance of scene manager");
