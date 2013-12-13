@@ -1,0 +1,3 @@
+[submodule "jni/render"]
+	path = jni/render
+	url = http://github.com/ua-i2cat/ThinRender
