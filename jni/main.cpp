@@ -58,7 +58,6 @@ static void free_resources() {
 	MeshManager::freeInstance();
 	TextManager::freeInstance();
 	ContextControllerEGL::getInstance()->endDisplay();
-	Data::DataController::getInstance()->freeInstance();
 	FileSystem::freeInstance();
 }
 
