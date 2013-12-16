@@ -45,13 +45,24 @@
 #include "render/GUI/Rect.h"
 #include "render/modules/audio/AudioPlayer.h"
 
+AudioPlayer* player = NULL;
+
 static void init_resources() {
 	logInf("creating new instance of scene manager");
 	GlobalData::getInstance()->scene = new BasicSceneManager();
     // TODO: initialize scene
+    player = new AudioPlayer(GlobalData::getInstance()->app->activity->assetManager);
+    player->setSource("demo.mp3");    
+    player->play();    
 }
 
 static void free_resources() {
+    player->stop();
+    if (player) {
+        delete player;
+        player = NULL;
+    }
+    logInf("Player deleted");
     if(GlobalData::getInstance()->scene != 0)
 		delete GlobalData::getInstance()->scene;
 	GlobalData::getInstance()->scene = 0;
