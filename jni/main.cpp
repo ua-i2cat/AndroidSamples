@@ -93,7 +93,9 @@ static void free_resources() {
 	MeshManager::freeInstance();
 	TextManager::freeInstance();
 	ContextControllerEGL::getInstance()->endDisplay();
+    logInf("FileSystem instance about to be released");
 	FileSystem::freeInstance();
+    logInf("FileSystem instance released");
 }
 
 static void engine_draw_frame() {
