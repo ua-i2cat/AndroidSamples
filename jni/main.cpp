@@ -45,24 +45,47 @@
 #include "render/GUI/Rect.h"
 #include "render/modules/audio/AudioPlayer.h"
 
-AudioPlayer* player = NULL;
+AudioPlayer* player1 = NULL;
+AudioPlayer* player2 = NULL;
+RectGUI* playPauseButton1 = NULL;
+RectGUI* playPauseButton2 = NULL;
+bool playing1 = false;
+bool playing2 = false;
 
 static void init_resources() {
 	logInf("creating new instance of scene manager");
 	GlobalData::getInstance()->scene = new BasicSceneManager();
-    // TODO: initialize scene
-    player = new AudioPlayer(GlobalData::getInstance()->app->activity->assetManager);
-    player->setSource("demo.mp3");    
-    player->play();    
+
+    player1 = new AudioPlayer("demo.mp3");
+    player2 = new AudioPlayer("demo2.mp3");
+
+    float w = GlobalData::getInstance()->screenWidth;
+    float h = GlobalData::getInstance()->screenHeight;
+
+    playPauseButton1 = GlobalData::getInstance()->scene->createRectangleGUI(0.25f*w, h - 0.25f*h, 0.25f*w, 0.25f*h);
+	playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
+    playPauseButton1->setClickable(true);
+    playPauseButton1->setText("play/pause 1", "FreeSans.ttf", 48);
+    
+    playPauseButton2 = GlobalData::getInstance()->scene->createRectangleGUI(0.50f*w, h - 0.25f*h, 0.25f*w, 0.25f*h);
+	playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
+    playPauseButton2->setClickable(true);
+    playPauseButton2->setText("play/pause 2", "FreeSans.ttf", 48);
 }
 
 static void free_resources() {
-    player->stop();
-    if (player) {
-        delete player;
-        player = NULL;
+    player1->stop();
+    if (player1) {
+        delete player1;
+        player1 = NULL;
     }
-    logInf("Player deleted");
+    logInf("Player 1 deleted");
+    player2->stop();
+    if (player2) {
+        delete player2;
+        player2 = NULL;
+    }
+    logInf("Player 2 deleted");
     if(GlobalData::getInstance()->scene != 0)
 		delete GlobalData::getInstance()->scene;
 	GlobalData::getInstance()->scene = 0;
@@ -79,8 +102,34 @@ static void engine_draw_frame() {
 	}
 	Timer::getInstance()->calculeCurrentTime();
 	
-    // TODO: update scene
-    
+    std::vector<event> events = Input::getInstance()->getEventsNotLooked();
+    RectGUI* rect = NULL;
+    if(events.size()>0 && events.at(0).state == Input::BEGIN_INPUT){
+        logInf("begin");
+        rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x, events.at(0).y);
+    }
+
+
+    if(rect == playPauseButton1){
+		if (playing1) {
+            logInf("paused1");
+            player1->pause();
+        } else {
+            logInf("playing1");
+            player1->play();
+        }
+        playing1 = !playing1;
+    } if(rect == playPauseButton2){
+		if (playing2) {
+            logInf("paused2");
+            player2->pause();
+        } else {
+            logInf("playing2");
+            player2->play();
+        }
+        playing2 = !playing2;
+    }    
+
     GlobalData::getInstance()->scene->updateVariables();
 	GlobalData::getInstance()->scene->createShadowMap();
     GlobalData::getInstance()->scene->cleanBuffers();
@@ -114,6 +163,7 @@ int onTouchEvent(AInputEvent* event){
 			yPositionTouch = AMotionEvent_getY(event,i);
 			idTouch = AMotionEvent_getPointerId(event,i);
 			Input::getInstance()->newEvent(idTouch, xPositionTouch, (float)GlobalData::getInstance()->screenHeight - yPositionTouch);
+            logInf("newEvent!");
 			break;
 		case AMOTION_EVENT_ACTION_MOVE:
 			xPositionTouch = AMotionEvent_getX(event,i);
