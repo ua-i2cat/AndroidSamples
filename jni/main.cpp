@@ -65,12 +65,12 @@ static void init_resources() {
     playPauseButton1 = GlobalData::getInstance()->scene->createRectangleGUI(0.25f*w, h - 0.25f*h, 0.25f*w, 0.25f*h);
 	playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
     playPauseButton1->setClickable(true);
-    playPauseButton1->setText("play/pause 1", "FreeSans.ttf", 48);
+    playPauseButton1->setText("PLAY", "FreeSans.ttf", 48);
     
     playPauseButton2 = GlobalData::getInstance()->scene->createRectangleGUI(0.50f*w, h - 0.25f*h, 0.25f*w, 0.25f*h);
 	playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
     playPauseButton2->setClickable(true);
-    playPauseButton2->setText("play/pause 2", "FreeSans.ttf", 48);
+    playPauseButton2->setText("PLAY", "FreeSans.ttf", 48);
 }
 
 static void free_resources() {
@@ -117,10 +117,12 @@ static void engine_draw_frame() {
             logInf("paused1");
             player1->pause();
 	        playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
+            playPauseButton1->setText("PLAY", "FreeSans.ttf", 48);
         } else {
             logInf("playing1");
             player1->play();
 	        playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
+            playPauseButton1->setText("PAUSE", "FreeSans.ttf", 48);
         }
         playing1 = !playing1;
     } if(rect == playPauseButton2){
@@ -128,10 +130,12 @@ static void engine_draw_frame() {
             logInf("paused2");
             player2->pause();
 	        playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
+            playPauseButton2->setText("PLAY", "FreeSans.ttf", 48);
         } else {
             logInf("playing2");
             player2->play();
 	        playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
+            playPauseButton2->setText("PAUSE", "FreeSans.ttf", 48);
         }
         playing2 = !playing2;
     }    
