@@ -116,18 +116,22 @@ static void engine_draw_frame() {
 		if (playing1) {
             logInf("paused1");
             player1->pause();
+	        playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
         } else {
             logInf("playing1");
             player1->play();
+	        playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
         }
         playing1 = !playing1;
     } if(rect == playPauseButton2){
 		if (playing2) {
             logInf("paused2");
             player2->pause();
+	        playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
         } else {
             logInf("playing2");
             player2->play();
+	        playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
         }
         playing2 = !playing2;
     }    
