@@ -245,7 +245,6 @@ static void cmdHandler(struct android_app* app, int32_t cmd) {
  * android_native_app_glue.  It runs in its own thread, with its own
  * event loop for receiving input events and doing other things.
  */
-
 void android_main(struct android_app* state) {
 	running = false;
 
