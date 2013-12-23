@@ -56,46 +56,44 @@ static void init_resources() {
 	logInf("creating new instance of scene manager");
 	GlobalData::getInstance()->scene = new BasicSceneManager();
 
-    player1 = new AudioPlayer("demo.mp3");
-    player2 = new AudioPlayer("demo2.mp3");
+	player1 = new AudioPlayer("demo.mp3");
+	player2 = new AudioPlayer("demo2.mp3");
 
-    float w = GlobalData::getInstance()->screenWidth;
-    float h = GlobalData::getInstance()->screenHeight;
+	float w = GlobalData::getInstance()->screenWidth;
+	float h = GlobalData::getInstance()->screenHeight;
 
-    playPauseButton1 = GlobalData::getInstance()->scene->createRectangleGUI(0.25f*w, h - 0.25f*h, 0.25f*w, 0.25f*h);
+	playPauseButton1 = GlobalData::getInstance()->scene->createRectangleGUI(0.25f*w, h - 0.25f*h, 0.25f*w, 0.25f*h);
 	playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-    playPauseButton1->setClickable(true);
-    playPauseButton1->setText("PLAY", "FreeSans.ttf", 48);
-    
-    playPauseButton2 = GlobalData::getInstance()->scene->createRectangleGUI(0.50f*w, h - 0.25f*h, 0.25f*w, 0.25f*h);
+	playPauseButton1->setClickable(true);
+	playPauseButton1->setText("PLAY", "FreeSans.ttf", 48);
+
+	playPauseButton2 = GlobalData::getInstance()->scene->createRectangleGUI(0.50f*w, h - 0.25f*h, 0.25f*w, 0.25f*h);
 	playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-    playPauseButton2->setClickable(true);
-    playPauseButton2->setText("PLAY", "FreeSans.ttf", 48);
+	playPauseButton2->setClickable(true);
+	playPauseButton2->setText("PLAY", "FreeSans.ttf", 48);
 }
 
 static void free_resources() {
-    player1->stop();
-    if (player1) {
-        delete player1;
-        player1 = NULL;
-    }
-    logInf("Player 1 deleted");
-    player2->stop();
-    if (player2) {
-        delete player2;
-        player2 = NULL;
-    }
-    logInf("Player 2 deleted");
-    if(GlobalData::getInstance()->scene != 0)
+	player1->stop();
+	if (player1) {
+		delete player1;
+		player1 = NULL;
+		logInf("Player 1 deleted");
+	}
+	player2->stop();
+	if (player2) {
+		delete player2;
+		player2 = NULL;
+		logInf("Player 2 deleted");
+	}
+	if(GlobalData::getInstance()->scene != 0)
 		delete GlobalData::getInstance()->scene;
 	GlobalData::getInstance()->scene = 0;
 	TextureManager::freeInstance();
 	MeshManager::freeInstance();
 	TextManager::freeInstance();
 	ContextControllerEGL::getInstance()->endDisplay();
-    logInf("FileSystem instance about to be released");
 	FileSystem::freeInstance();
-    logInf("FileSystem instance released");
 }
 
 static void engine_draw_frame() {
@@ -103,51 +101,50 @@ static void engine_draw_frame() {
 		return;
 	}
 	Timer::getInstance()->calculeCurrentTime();
-	
-    std::vector<event> events = Input::getInstance()->getEventsNotLooked();
-    RectGUI* rect = NULL;
-    if(events.size()>0 && events.at(0).state == Input::BEGIN_INPUT){
-        logInf("begin");
-        rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x, events.at(0).y);
-    }
 
+	std::vector<event> events = Input::getInstance()->getEventsNotLooked();
+	RectGUI* rect = NULL;
+	if(events.size()>0 && events.at(0).state == Input::BEGIN_INPUT){
+		logInf("begin");
+		rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x, events.at(0).y);
+	}
 
-    if(rect == playPauseButton1){
+	if(rect == playPauseButton1){
 		if (playing1) {
-            logInf("paused1");
-            player1->pause();
-	        playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-            playPauseButton1->setText("PLAY", "FreeSans.ttf", 48);
-        } else {
-            logInf("playing1");
-            player1->play();
-	        playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
-            playPauseButton1->setText("PAUSE", "FreeSans.ttf", 48);
-        }
-        playing1 = !playing1;
-    } if(rect == playPauseButton2){
+			logInf("paused1");
+			player1->pause();
+			playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
+			playPauseButton1->setText("PLAY", "FreeSans.ttf", 48);
+		} else {
+			logInf("playing1");
+			player1->play();
+			playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
+			playPauseButton1->setText("PAUSE", "FreeSans.ttf", 48);
+		}
+		playing1 = !playing1;
+	} if(rect == playPauseButton2){
 		if (playing2) {
-            logInf("paused2");
-            player2->pause();
-	        playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-            playPauseButton2->setText("PLAY", "FreeSans.ttf", 48);
-        } else {
-            logInf("playing2");
-            player2->play();
-	        playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
-            playPauseButton2->setText("PAUSE", "FreeSans.ttf", 48);
-        }
-        playing2 = !playing2;
-    }    
+			logInf("paused2");
+			player2->pause();
+			playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
+			playPauseButton2->setText("PLAY", "FreeSans.ttf", 48);
+		} else {
+			logInf("playing2");
+			player2->play();
+			playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
+			playPauseButton2->setText("PAUSE", "FreeSans.ttf", 48);
+		}
+		playing2 = !playing2;
+	}
 
-    GlobalData::getInstance()->scene->updateVariables();
+	GlobalData::getInstance()->scene->updateVariables();
 	GlobalData::getInstance()->scene->createShadowMap();
-    GlobalData::getInstance()->scene->cleanBuffers();
-    GlobalData::getInstance()->scene->render();
-    GlobalData::getInstance()->scene->renderBackground();
-    GlobalData::getInstance()->scene->renderGUI();
+	GlobalData::getInstance()->scene->cleanBuffers();
+	GlobalData::getInstance()->scene->render();
+	GlobalData::getInstance()->scene->renderBackground();
+	GlobalData::getInstance()->scene->renderGUI();
 
-    eglSwapBuffers(ContextControllerEGL::getInstance()->display, ContextControllerEGL::getInstance()->surface);
+	eglSwapBuffers(ContextControllerEGL::getInstance()->display, ContextControllerEGL::getInstance()->surface);
 }
 
 int onTouchEvent(AInputEvent* event){
@@ -167,28 +164,28 @@ int onTouchEvent(AInputEvent* event){
 		actionType = actionType & AMOTION_EVENT_ACTION_MASK;
 		if(actionIndex != i)continue;
 		switch(actionType){
-		case AMOTION_EVENT_ACTION_DOWN:
-		case AMOTION_EVENT_ACTION_POINTER_DOWN:
-			xPositionTouch = AMotionEvent_getX(event,i);
-			yPositionTouch = AMotionEvent_getY(event,i);
-			idTouch = AMotionEvent_getPointerId(event,i);
-			Input::getInstance()->newEvent(idTouch, xPositionTouch, (float)GlobalData::getInstance()->screenHeight - yPositionTouch);
-            logInf("newEvent!");
-			break;
-		case AMOTION_EVENT_ACTION_MOVE:
-			xPositionTouch = AMotionEvent_getX(event,i);
-			yPositionTouch = AMotionEvent_getY(event,i);
-			idTouch = AMotionEvent_getPointerId(event,i);
-			Input::getInstance()->updateEvent(idTouch, xPositionTouch, (float)GlobalData::getInstance()->screenHeight - yPositionTouch);
-			break;
-		case AMOTION_EVENT_ACTION_UP:
-		case AMOTION_EVENT_ACTION_CANCEL:
-		case AMOTION_EVENT_ACTION_POINTER_UP:
-			xPositionTouch = AMotionEvent_getX(event,i);
-			yPositionTouch = AMotionEvent_getY(event,i);
-			idTouch = AMotionEvent_getPointerId(event,i);
-			Input::getInstance()->updateEventToEnd(idTouch);
-			break;
+			case AMOTION_EVENT_ACTION_DOWN:
+			case AMOTION_EVENT_ACTION_POINTER_DOWN:
+				xPositionTouch = AMotionEvent_getX(event,i);
+				yPositionTouch = AMotionEvent_getY(event,i);
+				idTouch = AMotionEvent_getPointerId(event,i);
+				Input::getInstance()->newEvent(idTouch, xPositionTouch, (float)GlobalData::getInstance()->screenHeight - yPositionTouch);
+				logInf("newEvent!");
+				break;
+			case AMOTION_EVENT_ACTION_MOVE:
+				xPositionTouch = AMotionEvent_getX(event,i);
+				yPositionTouch = AMotionEvent_getY(event,i);
+				idTouch = AMotionEvent_getPointerId(event,i);
+				Input::getInstance()->updateEvent(idTouch, xPositionTouch, (float)GlobalData::getInstance()->screenHeight - yPositionTouch);
+				break;
+			case AMOTION_EVENT_ACTION_UP:
+			case AMOTION_EVENT_ACTION_CANCEL:
+			case AMOTION_EVENT_ACTION_POINTER_UP:
+				xPositionTouch = AMotionEvent_getX(event,i);
+				yPositionTouch = AMotionEvent_getY(event,i);
+				idTouch = AMotionEvent_getPointerId(event,i);
+				Input::getInstance()->updateEventToEnd(idTouch);
+				break;
 		}
 	}
 	return true;
@@ -197,13 +194,13 @@ int onTouchEvent(AInputEvent* event){
 int processInputEvent(AInputEvent* event) {
 	int eventType = AInputEvent_getType(event);
 	switch (eventType) {
-	case AINPUT_EVENT_TYPE_MOTION:
-		switch (AInputEvent_getSource(event)) {
-		case AINPUT_SOURCE_TOUCHSCREEN:
-			return onTouchEvent(event);
+		case AINPUT_EVENT_TYPE_MOTION:
+			switch (AInputEvent_getSource(event)) {
+				case AINPUT_SOURCE_TOUCHSCREEN:
+					return onTouchEvent(event);
+					break;
+			}
 			break;
-		}
-		break;
 	}
 	return 0;
 }
@@ -215,32 +212,32 @@ static int32_t inputHandler(struct android_app* app, AInputEvent* event) {
 bool running;
 
 static void cmdHandler(struct android_app* app, int32_t cmd) {
-    switch (cmd) {
-        case APP_CMD_SAVE_STATE:
-            break;
-        case APP_CMD_INIT_WINDOW:
-            // The window is being shown, get it ready.
-            if (GlobalData::getInstance()->app->window != NULL) {
-            	ContextControllerEGL::getInstance()->startDisplay();
-                init_resources();
-                engine_draw_frame();
-                running = true;
-            }
-            break;
-        case APP_CMD_TERM_WINDOW:
-            // The window is being hidden or closed, clean it up.
-        	free_resources();
-        	ContextControllerEGL::getInstance()->endDisplay();
-            break;
-        case APP_CMD_GAINED_FOCUS:
-            // When our app gains focus, we start monitoring the accelerometer.
-            break;
-        case APP_CMD_LOST_FOCUS:
-            logInf("APP_CMD_LOST_FOCUS");
-            free_resources();
-            ContextControllerEGL::getInstance()->endDisplay();
-            break;
-    }
+	switch (cmd) {
+		case APP_CMD_SAVE_STATE:
+			break;
+		case APP_CMD_INIT_WINDOW:
+			// The window is being shown, get it ready.
+			if (GlobalData::getInstance()->app->window != NULL) {
+				ContextControllerEGL::getInstance()->startDisplay();
+				init_resources();
+				engine_draw_frame();
+				running = true;
+			}
+			break;
+		case APP_CMD_TERM_WINDOW:
+			// The window is being hidden or closed, clean it up.
+			free_resources();
+			ContextControllerEGL::getInstance()->endDisplay();
+			break;
+		case APP_CMD_GAINED_FOCUS:
+			// When our app gains focus, we start monitoring the accelerometer.
+			break;
+		case APP_CMD_LOST_FOCUS:
+			logInf("APP_CMD_LOST_FOCUS");
+			free_resources();
+			ContextControllerEGL::getInstance()->endDisplay();
+			break;
+	}
 }
 
 /**
@@ -256,37 +253,37 @@ void android_main(struct android_app* state) {
 	GlobalData::getInstance()->screenMode = GlobalData::VERTICAL_SCREEN;
 	((AndroidFileSystem*)(FileSystem::getInstance()))->setAssetManager(state->activity);
 
-    // Make sure glue isn't stripped.
-    app_dummy();
+	// Make sure glue isn't stripped.
+	app_dummy();
 
-    state->onAppCmd = cmdHandler;
-    state->onInputEvent = inputHandler;
+	state->onAppCmd = cmdHandler;
+	state->onInputEvent = inputHandler;
 
-    // loop waiting for stuff to do.
-    int ident;
+	// loop waiting for stuff to do.
+	int ident;
 	int events;
 	struct android_poll_source* source;
 	bool sensorData = false;
-    while (1) {
-        // Read all pending events.
-        if(running){
+	while (1) {
+		// Read all pending events.
+		if(running){
 			engine_draw_frame();
 		}
-        // If not animating, we will block forever waiting for events.
-        // If animating, we loop until all events are read, then continue
-        // to draw the next frame of animation.
-        while ((ident=ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0) {
-            // Process this event.
-        	if (source != NULL) {
+		// If not animating, we will block forever waiting for events.
+		// If animating, we loop until all events are read, then continue
+		// to draw the next frame of animation.
+		while ((ident=ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0) {
+			// Process this event.
+			if (source != NULL) {
 				source->process(state, source);
 			}
-            // Check if we are exiting.
+			// Check if we are exiting.
 			if (state->destroyRequested != 0) {
 				free_resources();
 				ContextControllerEGL::getInstance()->endDisplay();
 				running = false;
 				return;
 			}
-        }
-    }
+		}
+	}
 }
