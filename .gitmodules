@@ -1,3 +1,3 @@
-[submodule "jni/render"]
-	path = jni/render
+[submodule "audio/jni/render"]
+	path = audio/jni/render
 	url = http://github.com/ua-i2cat/ThinRender
