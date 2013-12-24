@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.i2cat.renderandroidsample"
+    package="net.i2cat.renderandroidshadersample"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -15,7 +15,7 @@
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
-    
+
     <!-- This .apk has no Java code itself, so set hasCode to false. -->
     <application
         android:allowBackup="true"
