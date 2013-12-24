@@ -153,22 +153,24 @@ static void init_resources() {
     altCamera->setNearClipDistance(0.1);
 
     // GUI
-    float aspectRatio = (float)GlobalData::getInstance()->screenHeight/(float)GlobalData::getInstance()->screenWidth;
+	float width = (float)GlobalData::getInstance()->screenHeight;
+	float height = (float)GlobalData::getInstance()->screenWidth;
+    float aspectRatio = height/width;
     RectGUI* rect = 0;
 
-    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f, 1.0f, 0.25f, 0.1);
+    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*height, 1.0f*width, 0.25f*height, 0.1*width);
     rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
     rect->setText("Shader", "FreeSans.ttf", 48);
     rect->setClickable(true);
     rectShader = rect;
 
-    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f, 1.0f - 0.1f, 0.25f, 0.1f);
+    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*height, (1.0f - 0.1f)*width, 0.25f*height, 0.1f*width);
     rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
     rect->setText("Camera", "FreeSans.ttf", 48);
     rect->setClickable(true);
     rectCamera = rect;
 
-    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f, 1.0f - 2.0f*0.1f, 0.25f, 0.1f);
+    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*height, (1.0f - 2.0f*0.1f)*width, 0.25f*height, 0.1f*width);
     rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
     rect->setText("Light", "FreeSans.ttf", 48);
     rect->setClickable(true);
@@ -199,8 +201,7 @@ static void engine_draw_frame(){
     // Process events. See onTouchEvent function.
     std::vector<event> events = Input::getInstance()->getEventsNotLooked();
     if(events.size() != 0) {
-        RectGUI* rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x/(float)GlobalData::getInstance()->screenWidth,
-                                                                       1.0f - events.at(0).y/(float)GlobalData::getInstance()->screenHeight);
+        RectGUI* rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x, events.at(0).y);
         if (rect) {
             if (rect == rectLight) {
                 logInf("Light click!");
