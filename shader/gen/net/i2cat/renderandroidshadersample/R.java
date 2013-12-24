@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package net.i2cat.renderandroidsample;
+package net.i2cat.renderandroidshadersample;
 
 public final class R {
     public static final class attr {
