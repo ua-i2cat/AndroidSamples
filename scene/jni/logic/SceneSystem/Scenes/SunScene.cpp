@@ -95,7 +95,7 @@ int SunScene::update(SceneStateMachine *machine){
 	std::vector<event> events = Input::getInstance()->getEventsNotLooked();
 	if(events.size() == 0) return NOTHING;
 
-    RectGUI* rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x/(float)GlobalData::getInstance()->screenWidth, 1.0f - events.at(0).y/(float)GlobalData::getInstance()->screenHeight);
+	RectGUI* rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x, events.at(0).y);
 	if(rect == StaticGUI::nextButton) {
         Input::getInstance()->clearEvents();
         machine->currentState = new IntroductionScene();

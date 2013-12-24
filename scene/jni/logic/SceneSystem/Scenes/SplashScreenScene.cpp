@@ -33,7 +33,10 @@ SplashScreenScene::SplashScreenScene(){
     TextManager::freeInstance();
     FileSystem::freeInstance();
 
-    RectGUI* rect = GlobalData::getInstance()->scene->createRectangleGUI(0.25f, 1.0f - 0.25f, 0.25f, 0.25f);
+	float h = (float)GlobalData::getInstance()->screenHeight;
+	float w = (float)GlobalData::getInstance()->screenWidth;
+
+    RectGUI* rect = GlobalData::getInstance()->scene->createRectangleGUI(0.25f*w, (1.0f - 0.25f)*h, 0.25f*w, 0.25f*h);
     rect->setText("Thin Render Samples", "FreeSans.ttf", 48);
 
     rect = GlobalData::getInstance()->scene->createRectangleBackground();

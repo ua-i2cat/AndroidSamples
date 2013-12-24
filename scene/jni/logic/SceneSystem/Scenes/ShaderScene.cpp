@@ -124,26 +124,27 @@ ShaderScene::ShaderScene(){
 	altCamera->setNearClipDistance(0.1);
 
 	// GUI
-	float aspectRatio = (float)GlobalData::getInstance()->screenHeight/(float)GlobalData::getInstance()->screenWidth;
-	RectGUI* rect = 0;
+	float h = (float)GlobalData::getInstance()->screenHeight;
+	float w = (float)GlobalData::getInstance()->screenWidth;
+    RectGUI* rect = 0;
 
-	rect = GlobalData::getInstance()->scene->createRectangleGUI(0.75f, 1.0f, 0.25f, 0.1);
-	rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-	rect->setText("Shader", "FreeSans.ttf", 48);
-	rect->setClickable(true);
-	rectShader = rect;
+    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.9f*w, 1.0f*h, 0.1f*w, 0.1*h);
+    rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
+    rect->setText("Shader", "FreeSans.ttf", 48);
+    rect->setClickable(true);
+    rectShader = rect;
 
-	rect = GlobalData::getInstance()->scene->createRectangleGUI(0.75f, 1.0f - 0.1f, 0.25f, 0.1f);
-	rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-	rect->setText("Camera", "FreeSans.ttf", 48);
-	rect->setClickable(true);
-	rectCamera = rect;
+    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.9f*w, (1.0f - 0.1f)*h, 0.1f*w, 0.1f*h);
+    rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
+    rect->setText("Camera", "FreeSans.ttf", 48);
+    rect->setClickable(true);
+    rectCamera = rect;
 
-	rect = GlobalData::getInstance()->scene->createRectangleGUI(0.75f, 1.0f - 2.0f*0.1f, 0.25f, 0.1f);
-	rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-	rect->setText("Light", "FreeSans.ttf", 48);
-	rect->setClickable(true);
-	rectLight = rect;
+    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.9f*w, (1.0f - 2.0f*0.1f)*h, 0.1f*w, 0.1f*h);
+    rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
+    rect->setText("Light", "FreeSans.ttf", 48);
+    rect->setClickable(true);
+    rectLight = rect;
 }
 
 ShaderScene::~ShaderScene(){
@@ -177,8 +178,7 @@ int ShaderScene::update(SceneStateMachine *machine){
 	// Process events
 	std::vector<event> events = Input::getInstance()->getEventsNotLooked();
 	if(events.size() != 0) {
-		RectGUI* rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x/(float)GlobalData::getInstance()->screenWidth,
-																   1.0f - events.at(0).y/(float)GlobalData::getInstance()->screenHeight);
+		RectGUI* rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x, events.at(0).y);
 		if (rect) {
 			Input::getInstance()->clearEvents();
 			if (rect == rectLight) {

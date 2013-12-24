@@ -47,7 +47,7 @@
 #include "logic/SceneSystem/SceneStateMachine.h"
 #include "logic/SceneSystem/Scenes/SplashScreenScene.h"
 
-SceneStateMachine* ssm;
+SceneStateMachine* ssm = 0;
 
 static void init_resources() {
 	logInf("creating new instance of scene manager");
@@ -63,11 +63,16 @@ static void free_resources() {
 	MeshManager::freeInstance();
 	TextManager::freeInstance();
 	ContextControllerEGL::getInstance()->endDisplay();
-	delete ssm;
-	ssm = 0;
+	if(ssm != 0){
+		delete ssm;
+		ssm = 0;
+	}
 }
 
 static void engine_draw_frame() {
+	if(ContextControllerEGL::getInstance()->display == NULL){
+		return;
+	}
 	Timer::getInstance()->calculeCurrentTime();
 	GlobalData::getInstance()->scene->updateVariables();
 	GlobalData::getInstance()->scene->createShadowMap();
@@ -97,28 +102,27 @@ int onTouchEvent(AInputEvent* event){
 		actionType = actionType & AMOTION_EVENT_ACTION_MASK;
 		if(actionIndex != i)continue;
 		switch(actionType){
-			case AMOTION_EVENT_ACTION_DOWN:
-			case AMOTION_EVENT_ACTION_POINTER_DOWN:
-				xPositionTouch = AMotionEvent_getX(event,i);
-				yPositionTouch = AMotionEvent_getY(event,i);
-				idTouch = AMotionEvent_getPointerId(event,i);
-				Input::getInstance()->newEvent(idTouch, xPositionTouch, (float)GlobalData::getInstance()->screenHeight - yPositionTouch);
-				logInf("newEvent!");
-				break;
-			case AMOTION_EVENT_ACTION_MOVE:
-				xPositionTouch = AMotionEvent_getX(event,i);
-				yPositionTouch = AMotionEvent_getY(event,i);
-				idTouch = AMotionEvent_getPointerId(event,i);
-				Input::getInstance()->updateEvent(idTouch, xPositionTouch, (float)GlobalData::getInstance()->screenHeight - yPositionTouch);
-				break;
-			case AMOTION_EVENT_ACTION_UP:
-			case AMOTION_EVENT_ACTION_CANCEL:
-			case AMOTION_EVENT_ACTION_POINTER_UP:
-				xPositionTouch = AMotionEvent_getX(event,i);
-				yPositionTouch = AMotionEvent_getY(event,i);
-				idTouch = AMotionEvent_getPointerId(event,i);
-				Input::getInstance()->updateEventToEnd(idTouch);
-				break;
+		case AMOTION_EVENT_ACTION_DOWN:
+		case AMOTION_EVENT_ACTION_POINTER_DOWN:
+			xPositionTouch = AMotionEvent_getX(event,i);
+			yPositionTouch = AMotionEvent_getY(event,i);
+			idTouch = AMotionEvent_getPointerId(event,i);
+			Input::getInstance()->newEvent(idTouch, xPositionTouch, (float)GlobalData::getInstance()->screenHeight - yPositionTouch);
+			break;
+		case AMOTION_EVENT_ACTION_MOVE:
+			xPositionTouch = AMotionEvent_getX(event,i);
+			yPositionTouch = AMotionEvent_getY(event,i);
+			idTouch = AMotionEvent_getPointerId(event,i);
+			Input::getInstance()->updateEvent(idTouch, xPositionTouch, (float)GlobalData::getInstance()->screenHeight - yPositionTouch);
+			break;
+		case AMOTION_EVENT_ACTION_UP:
+		case AMOTION_EVENT_ACTION_CANCEL:
+		case AMOTION_EVENT_ACTION_POINTER_UP:
+			xPositionTouch = AMotionEvent_getX(event,i);
+			yPositionTouch = AMotionEvent_getY(event,i);
+			idTouch = AMotionEvent_getPointerId(event,i);
+			Input::getInstance()->updateEventToEnd(idTouch);
+			break;
 		}
 	}
 	return true;

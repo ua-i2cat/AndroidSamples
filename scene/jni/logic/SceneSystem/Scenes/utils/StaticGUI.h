@@ -33,18 +33,12 @@ namespace StaticGUI {
 	static RectGUI* previousButton;
 
 	static void initGUIButtons(){
-		float w = 1.0f/7.0f;
-		float aspectRatio = (float)GlobalData::getInstance()->screenHeight/(float)GlobalData::getInstance()->screenWidth;
-		float h = aspectRatio * 1.0f/7.0f;
+		float w = (float)GlobalData::getInstance()->screenWidth;
+		float h = (float)GlobalData::getInstance()->screenHeight;
 
-		homeButton = GlobalData::getInstance()->scene->createRectangleGUI(0.0f, 1.0f, w, h);
-		nextButton = GlobalData::getInstance()->scene->createRectangleGUI(0.0f, 1.0f - 1.25f * h, w, h);
-		previousButton = GlobalData::getInstance()->scene->createRectangleGUI(0.0f, 1.0f - 2.5f * h, w, h);
-
-		//homeButton->setTexture(TextureManager::getInstance()->getTexture("GUI/casa.png"));
-		//nextButton->setTexture(TextureManager::getInstance()->getTexture("GUI/mapa.png"));
-		//previousButton->setTexture(TextureManager::getInstance()->getTexture("GUI/poi.png"));
-
+		homeButton = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*w, 1.0f*h, 0.2f*w, 0.2f*h);
+		nextButton = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*w, (1.0f - 0.225f)*h, 0.2f*w, 0.2f*h);
+		previousButton = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*w, (1.0f - 0.45f)*h, 0.2f*w, 0.2f*h);
 
 		homeButton->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
 		nextButton->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
