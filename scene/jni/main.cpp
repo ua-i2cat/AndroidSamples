@@ -43,208 +43,41 @@
 #include "render/inputSystem/Input.h"
 #include "render/GUI/TextManager.h"
 #include "render/GUI/Rect.h"
-#include "render/modules/audio/AudioPlayer.h"
-#include "render/shader/lightning/DirectionalLightShadowMapShader.h"
-#include "render/shader/lightning/DirectionalLightTexturedShadowMapShader.h"
 
-Node* cameraParentNode = 0;
-Node* cameraNode = 0;
-Camera* mainCamera = 0;
-Camera* altCamera = 0;
+#include "logic/SceneSystem/SceneStateMachine.h"
+#include "logic/SceneSystem/Scenes/SplashScreenScene.h"
 
-RectGUI* rectShader = 0;
-RectGUI* rectCamera = 0;
-RectGUI* rectLight = 0;
-
-bool changeShader = false;
-bool changeCamera = false;
-bool rotateLight = false;
-
-Node* coreNode = 0;
-Mesh* coreMesh = 0;
-Shader* shaderA = 0;
-Shader* shaderB = 0;
-
-std::vector<Node*> eNodes;
-std::vector<Mesh*> eMeshes;
-std::vector<Node*> eCenterNodes;
+SceneStateMachine* ssm;
 
 static void init_resources() {
 	logInf("creating new instance of scene manager");
 	GlobalData::getInstance()->scene = new BasicSceneManager();
-
-    // Creating the core
-    coreNode = GlobalData::getInstance()->scene->getRootNode()->createChild();
-    coreMesh = GlobalData::getInstance()->scene->createMesh("sphere.obj");
-    coreNode->attachSceneObject(coreMesh);
-    coreNode->setScale(glm::vec3(2.0f, 2.0f, 2.0f));
-
-    // Saving the original shader (DirectionalLightShadowMapShader)
-    shaderA = coreMesh->shader;
-
-    Texture* texture = TextureManager::getInstance()->getTexture("BoxTexture.png");
-    coreMesh->subMeshes[0]->textureSubMesh = texture;
-
-    // Creating another shader (DirectionalLightShadowMapShadowMapShader)
-    shaderB = new DirectionalLightTexturedShadowMapShader();
-
-    glm::vec3 ePositions[4] = {
-        glm::vec3(-4.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -4.0f),
-        glm::vec3(+4.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, +4.0f)
-    };
-
-    // Creating the electrons
-    for (int i = 0; i < 4; i++) {
-        Node* coreAuxNode = 0;
-        Node* eAuxNode = 0;
-        Mesh* eAuxMesh = 0;
-
-        coreAuxNode = GlobalData::getInstance()->scene->getRootNode()->createChild();
-
-        eAuxNode = coreAuxNode->createChild();
-        eAuxMesh = GlobalData::getInstance()->scene->createMesh("sphere.obj");
-        eAuxNode->attachSceneObject(eAuxMesh);
-        eAuxNode->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
-        eAuxNode->setPosition(ePositions[i]);
-        eNodes.push_back(eAuxNode);
-        eMeshes.push_back(eAuxMesh);
-
-        eAuxNode = coreAuxNode->createChild();
-        eAuxMesh = GlobalData::getInstance()->scene->createMesh("sphere.obj");
-        eAuxNode->attachSceneObject(eAuxMesh);
-        eAuxNode->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
-        eAuxNode->setPosition(-ePositions[i]);
-        eNodes.push_back(eAuxNode);
-        eMeshes.push_back(eAuxMesh);
-
-        coreAuxNode->rotate(glm::vec3(0.0f, 0.0f, 1.0f), Maths::PI/4.0f * (float)i);
-        eCenterNodes.push_back(coreAuxNode);
-    }
-
-    Node* cameraNode = 0;
-
-    // Second camera disabled, to create shadow map
-	Camera* camera = 0;
-    cameraParentNode = GlobalData::getInstance()->scene->getRootNode()->createChild();
-	cameraNode = cameraParentNode->createChild();
-	camera = GlobalData::getInstance()->scene->createCamera();
-	cameraNode->attachSceneObject(camera);
-    cameraNode->attachSceneObject(GlobalData::getInstance()->scene->createLight()); // TODO: not working. Ignored
-	camera->setAspectRatio((float)GlobalData::getInstance()->screenWidth/(float)GlobalData::getInstance()->screenHeight);
-	cameraNode->setPosition(glm::vec3(-17.0f, 0.0f,0.0f));
-    camera->setFarClipDistance(30.0f);
-	camera->setEnabled(false);
-	cameraNode->lookAt(glm::vec3(0.0f,0.0f,0.0f));
-
-	cameraNode = GlobalData::getInstance()->scene->getRootNode()->createChild();
-	mainCamera = GlobalData::getInstance()->scene->createCamera();
-	cameraNode->attachSceneObject(mainCamera);
-	mainCamera->setAspectRatio((float)GlobalData::getInstance()->screenWidth/(float)GlobalData::getInstance()->screenHeight);
-	cameraNode->setPosition(glm::vec3(-14.0f, 10.0f,8.0f));
-	cameraNode->lookAt(glm::vec3(0.0f,0.0f,0.0f));
-
-    // Alternative camera
-    altCamera = GlobalData::getInstance()->scene->createCamera();
-    eNodes[0]->attachSceneObject(altCamera);
-	altCamera->setAspectRatio((float)GlobalData::getInstance()->screenWidth/(float)GlobalData::getInstance()->screenHeight);
-    altCamera->setEnabled(false);
-    altCamera->setNearClipDistance(0.1);
-
-    // GUI
-	float width = (float)GlobalData::getInstance()->screenHeight;
-	float height = (float)GlobalData::getInstance()->screenWidth;
-    float aspectRatio = height/width;
-    RectGUI* rect = 0;
-
-    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*height, 1.0f*width, 0.25f*height, 0.1*width);
-    rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-    rect->setText("Shader", "FreeSans.ttf", 48);
-    rect->setClickable(true);
-    rectShader = rect;
-
-    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*height, (1.0f - 0.1f)*width, 0.25f*height, 0.1f*width);
-    rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-    rect->setText("Camera", "FreeSans.ttf", 48);
-    rect->setClickable(true);
-    rectCamera = rect;
-
-    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*height, (1.0f - 2.0f*0.1f)*width, 0.25f*height, 0.1f*width);
-    rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
-    rect->setText("Light", "FreeSans.ttf", 48);
-    rect->setClickable(true);
-    rectLight = rect;
+    ssm = new SceneStateMachine(new SplashScreenScene());
 }
 
-static void free_resources(){
-	if(GlobalData::getInstance()->scene != 0){
+static void free_resources() {
+    if(GlobalData::getInstance()->scene != 0)
 		delete GlobalData::getInstance()->scene;
-	}
 	GlobalData::getInstance()->scene = 0;
 	TextureManager::freeInstance();
 	MeshManager::freeInstance();
 	TextManager::freeInstance();
 	ContextControllerEGL::getInstance()->endDisplay();
-	FileSystem::freeInstance();
+	delete ssm;
+	ssm = 0;
 }
 
-static void engine_draw_frame(){
-	if(ContextControllerEGL::getInstance()->display == NULL){
-		return;
-	}
+static void engine_draw_frame() {
 	Timer::getInstance()->calculeCurrentTime();
-
-	float eAngle = Timer::getInstance()->getDeltaTime() * 0.1f * Maths::PI/180.0f;
-    float cameraAngle = Timer::getInstance()->getDeltaTime() * 0.05f * Maths::PI/180.0f;
-
-    // Process events. See onTouchEvent function.
-    std::vector<event> events = Input::getInstance()->getEventsNotLooked();
-    if(events.size() != 0) {
-        RectGUI* rect = GlobalData::getInstance()->scene->getRectTouch(events.at(0).x, events.at(0).y);
-        if (rect) {
-            if (rect == rectLight) {
-                logInf("Light click!");
-                rotateLight = !rotateLight;
-            } else if (rect == rectCamera) {
-                changeCamera = !changeCamera;
-                logInf("Camera click!");
-            } else if (rect == rectShader) {
-                changeShader = !changeShader;
-                logInf("Shader click!");
-            }
-            Input::getInstance()->clearEvents();
-        }
-    }
-
-    if (rotateLight) {
-        cameraParentNode->rotate(glm::vec3(0.0f, 0.0f, 1.0f), cameraAngle);
-    }
-
-    if (changeCamera) {
-        mainCamera->setEnabled(!mainCamera->getEnabled());
-        altCamera->setEnabled(!altCamera->getEnabled());
-        changeCamera = false;
-    }
-
-    coreMesh->shader = changeShader ? shaderA : shaderB;
-    for (int i = 0; i < eMeshes.size(); i++) {
-        eMeshes[i]->shader = changeShader ? shaderA : shaderB;
-    }
-
-    for (int i = 0; i < eCenterNodes.size(); i++) {
-        eCenterNodes[i]->rotate(glm::vec3(0.0f, 1.0f, 0.0f), eAngle);
-        eNodes[i]->rotate(glm::vec3(0.0f, 1.0f, 0.0f), -eAngle);
-    }
-
 	GlobalData::getInstance()->scene->updateVariables();
 	GlobalData::getInstance()->scene->createShadowMap();
-	GlobalData::getInstance()->scene->cleanBuffers();
-	GlobalData::getInstance()->scene->render();
-	GlobalData::getInstance()->scene->renderBackground();
-	GlobalData::getInstance()->scene->renderGUI();
+	ssm->updateMachine();
+    GlobalData::getInstance()->scene->cleanBuffers();
+    GlobalData::getInstance()->scene->render();
+    GlobalData::getInstance()->scene->renderBackground();
+    GlobalData::getInstance()->scene->renderGUI();
 
-	eglSwapBuffers(ContextControllerEGL::getInstance()->display, ContextControllerEGL::getInstance()->surface);
+    eglSwapBuffers(ContextControllerEGL::getInstance()->display, ContextControllerEGL::getInstance()->surface);
 }
 
 int onTouchEvent(AInputEvent* event){

@@ -54,7 +54,13 @@ LOCAL_SRC_FILES := 	main.cpp \
 					render/sceneObjects/camera/Camera.cpp \
 					render/sceneObjects/light/Light.cpp \
 					render/inputSystem/Input.cpp \
-					render/modules/audio/AudioPlayer.cpp
+					render/modules/audio/AudioPlayer.cpp \
+					logic/SceneSystem/Scenes/IntroductionScene.cpp \
+					logic/SceneSystem/Scenes/SunScene.cpp \
+					logic/SceneSystem/Scenes/AtomScene.cpp \
+					logic/SceneSystem/Scenes/ShaderScene.cpp \
+					logic/SceneSystem/Scenes/SplashScreenScene.cpp \
+					logic/SceneSystem/SceneStateMachine.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lz -lOpenSLES
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng libjpeg libfreetype
