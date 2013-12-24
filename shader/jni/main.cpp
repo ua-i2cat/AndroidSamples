@@ -349,7 +349,7 @@ void android_main(struct android_app* state) {
 	running = false;
 
 	GlobalData::getInstance()->app = state;
-	GlobalData::getInstance()->screenMode = GlobalData::VERTICAL_SCREEN;
+	GlobalData::getInstance()->screenMode = GlobalData::HORIZONTAL_SCREEN;
 	((AndroidFileSystem*)(FileSystem::getInstance()))->setAssetManager(state->activity);
 
 	// Make sure glue isn't stripped.

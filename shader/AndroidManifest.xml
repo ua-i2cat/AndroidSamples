@@ -28,7 +28,7 @@
         <activity
             android:name="android.app.NativeActivity"
             android:configChanges="fontScale|keyboard|orientation|keyboardHidden|locale|mnc|mcc|navigation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
 
             <!-- Tell NativeActivity the name of or .so -->
