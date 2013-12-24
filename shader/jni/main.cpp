@@ -153,24 +153,23 @@ static void init_resources() {
     altCamera->setNearClipDistance(0.1);
 
     // GUI
-	float width = (float)GlobalData::getInstance()->screenHeight;
-	float height = (float)GlobalData::getInstance()->screenWidth;
-    float aspectRatio = height/width;
+	float h = (float)GlobalData::getInstance()->screenHeight;
+	float w = (float)GlobalData::getInstance()->screenWidth;
     RectGUI* rect = 0;
 
-    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*height, 1.0f*width, 0.25f*height, 0.1*width);
+    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.9f*w, 1.0f*h, 0.1f*w, 0.1*h);
     rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
     rect->setText("Shader", "FreeSans.ttf", 48);
     rect->setClickable(true);
     rectShader = rect;
 
-    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*height, (1.0f - 0.1f)*width, 0.25f*height, 0.1f*width);
+    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.9f*w, (1.0f - 0.1f)*h, 0.1f*w, 0.1f*h);
     rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
     rect->setText("Camera", "FreeSans.ttf", 48);
     rect->setClickable(true);
     rectCamera = rect;
 
-    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.0f*height, (1.0f - 2.0f*0.1f)*width, 0.25f*height, 0.1f*width);
+    rect = GlobalData::getInstance()->scene->createRectangleGUI(0.9f*w, (1.0f - 2.0f*0.1f)*h, 0.1f*w, 0.1f*h);
     rect->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
     rect->setText("Light", "FreeSans.ttf", 48);
     rect->setClickable(true);
