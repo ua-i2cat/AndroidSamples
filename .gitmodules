@@ -4,3 +4,6 @@
 [submodule "shader/jni/render"]
 	path = shader/jni/render
 	url = http://github.com/ua-i2cat/ThinRender
+[submodule "scene/jni/render"]
+	path = scene/jni/render
+	url = http://github.com/ua-i2cat/ThinRender
