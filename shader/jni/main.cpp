@@ -131,9 +131,9 @@ static void init_resources() {
 	cameraNode = cameraParentNode->createChild();
 	camera = GlobalData::getInstance()->scene->createCamera();
 	cameraNode->attachSceneObject(camera);
-    cameraNode->attachSceneObject(GlobalData::getInstance()->scene->createLight()); // TODO: not working. Ignored
+    cameraNode->attachSceneObject(GlobalData::getInstance()->scene->createLight());
 	camera->setAspectRatio((float)GlobalData::getInstance()->screenWidth/(float)GlobalData::getInstance()->screenHeight);
-	cameraNode->setPosition(glm::vec3(-17.0f, 0.0f,0.0f));
+	cameraNode->setPosition(glm::vec3(-25.0f, 0.0f,0.0f));
     camera->setFarClipDistance(30.0f);
 	camera->setEnabled(false);
 	cameraNode->lookAt(glm::vec3(0.0f,0.0f,0.0f));
