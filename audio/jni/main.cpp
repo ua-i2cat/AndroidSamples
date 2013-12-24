@@ -74,20 +74,19 @@ static void init_resources() {
 }
 
 static void free_resources() {
-	player1->stop();
-	if (player1) {
+	if(player1){
+		player1->stop();
 		delete player1;
 		player1 = NULL;
-		logInf("Player 1 deleted");
 	}
-	player2->stop();
-	if (player2) {
+	if(player2){
+		player2->stop();
 		delete player2;
 		player2 = NULL;
-		logInf("Player 2 deleted");
 	}
-	if(GlobalData::getInstance()->scene != 0)
+	if(GlobalData::getInstance()->scene != 0){
 		delete GlobalData::getInstance()->scene;
+	}
 	GlobalData::getInstance()->scene = 0;
 	TextureManager::freeInstance();
 	MeshManager::freeInstance();
@@ -96,8 +95,8 @@ static void free_resources() {
 	FileSystem::freeInstance();
 }
 
-static void engine_draw_frame() {
-	if (ContextControllerEGL::getInstance()->display == NULL) {
+static void engine_draw_frame(){
+	if(ContextControllerEGL::getInstance()->display == NULL){
 		return;
 	}
 	Timer::getInstance()->calculeCurrentTime();
@@ -110,25 +109,25 @@ static void engine_draw_frame() {
 	}
 
 	if(rect == playPauseButton1){
-		if (playing1) {
+		if(playing1){
 			logInf("paused1");
 			player1->pause();
 			playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
 			playPauseButton1->setText("PLAY", "FreeSans.ttf", 48);
-		} else {
+		}else{
 			logInf("playing1");
 			player1->play();
 			playPauseButton1->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
 			playPauseButton1->setText("PAUSE", "FreeSans.ttf", 48);
 		}
 		playing1 = !playing1;
-	} if(rect == playPauseButton2){
-		if (playing2) {
+	}else if(rect == playPauseButton2){
+		if(playing2){
 			logInf("paused2");
 			player2->pause();
 			playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquare.png"));
 			playPauseButton2->setText("PLAY", "FreeSans.ttf", 48);
-		} else {
+		}else{
 			logInf("playing2");
 			player2->play();
 			playPauseButton2->setTexture(TextureManager::getInstance()->getTexture("blueSquareClicked.png"));
