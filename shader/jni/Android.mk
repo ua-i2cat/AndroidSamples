@@ -34,6 +34,8 @@ LOCAL_SRC_FILES := 	main.cpp \
 					render/shader/basic/TextureShader.cpp \
 					render/shader/gui/SimplePlaneShader.cpp \
 					render/shader/gui/SimplePlaneDepthShader.cpp \
+					render/shader/gui/CameraPreviewPlaneShader.cpp \
+					render/shader/gui/VideoPlaneShader.cpp \
 					render/shader/gui/AxisShader.cpp \
 					render/utils/Timer.cpp \
 					render/scene/Node.cpp \
@@ -43,6 +45,7 @@ LOCAL_SRC_FILES := 	main.cpp \
 					render/GUI/TextManager.cpp \
 					render/GUI/Rect.cpp \
 					render/GUI/GUIUtils/SliderGUI.cpp \
+					render/GUI/GUIUtils/SliderBlockGUI.cpp \
 					render/scene/RTT/BasicRTT.cpp \
 					render/scene/RTT/DepthRTT.cpp \
 					render/scene/RTT/PickRTT.cpp \
@@ -53,8 +56,7 @@ LOCAL_SRC_FILES := 	main.cpp \
 					render/sceneObjects/mesh/MeshManager.cpp \
 					render/sceneObjects/camera/Camera.cpp \
 					render/sceneObjects/light/Light.cpp \
-					render/inputSystem/Input.cpp \
-					render/modules/audio/AudioPlayer.cpp
+					render/inputSystem/Input.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lz -lOpenSLES
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng libjpeg libfreetype
